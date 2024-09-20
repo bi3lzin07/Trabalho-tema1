@@ -6,6 +6,8 @@ class UserProvider with ChangeNotifier {
 
   bool get isAuthenticated => _user != null;
 
+  User? get user => _user; // Adicione este getter
+
   void login(String email, String password) {
     _user = User(email: email, password: password);
     notifyListeners();
