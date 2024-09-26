@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPlatform - Bem-vindo</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #fffb03, #edec81);
+        }
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        h2 {
+            color: #161615;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .buttons button {
+            background-color: #fffb03;
+            color: rgb(0, 0, 0);
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .buttons button:hover {
+            background-color: #ffeb3b;
+            transform: scale(1.03);
+        }
+        .form-container {
+            margin-top: 20px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-container input:focus,
+        .form-container select:focus {
+            border-color: #050505;
+            outline: none;
+        }
+        .form-container .link {
+            display: block;
+            margin-top: 15px;
+            color: hsl(60, 4%, 5%);
+            text-decoration: none;
+        }
+        .form-container .link:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+        #student-list {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div id="home-container" class="container">
+        <h2>Bem-vindo à EduPlatform</h2>
+        <p>Gerencie suas turmas e atividades com facilidade e eficiência.</p>
+        <div class="buttons">
+            <button onclick="toggleVisibility('home-container', 'register-container')">Cadastrar-se</button>
+            <button onclick="toggleVisibility('home-container', 'login-container')">Entrar</button>
+        </div>
+    </div>
+
+    <div id="login-container" class="container hidden">
+        <h2>Login Escolar</h2>
+        <form onsubmit="login(event)">
+            <div class="form-container">
+                <select name="role" required>
+                    <option value="" disabled selected>Selecione seu perfil</option>
+                    <option value="professor">Professor</option>
+                    <option value="aluno">Aluno</option>
+                </select>
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+                <a href="#" class="link" onclick="toggleVisibility('login-container', 'register-container')">Não tem uma conta? Cadastre-se</a>
+            </div>
+        </form>
+    </div>
+
+    <div id="register-container" class="container hidden">
+        <h2>Cadastro Escolar</h2>
+        <p>Selecione seu perfil:</p>
+        <div class="buttons">
+            <button onclick="toggleVisibility('register-container', 'teacher-register-container')">Professor</button>
+            <button onclick="toggleVisibility('register-container', 'student-register-container')">Aluno</button>
+        </div>
+        <a href="#" class="link" onclick="toggleVisibility('register-container', 'login-container')">Já tem uma conta? Entrar</a>
+    </div>
+
+    <div id="teacher-register-container" class="container hidden">
+        <h2>Cadastro de Professor</h2>
+        <form onsubmit="register(event)">
+            <div class="form-container">
+                <input type="text" placeholder="Nome" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Matéria" required>
+                <input type="password" placeholder="Senha" required>
+                <input type="password" placeholder="Confirmar Senha" required>
+                <input type="text" placeholder="CPF" required>
+                <button type="submit">Cadastrar Professor</button>
+                <a href="#" class="link" onclick="toggleVisibility('teacher-register-container', 'register-container')">Voltar</a>
+            </div>
+        </form>
+    </div>
+
+    <div id="student-register-container" class="container hidden">
+        <h2>Cadastro de Aluno</h2>
+        <form onsubmit="registerStudent(event)">
+            <div class="form-container">
+                <input type="text" id="student-nome" placeholder="Nome" required>
+                <input type="email" id="student-email" placeholder="Email" required>
+                <input type="date" id="student-dob" placeholder="Data de Nascimento" required>
+                <input type="text" id="student-id" placeholder="Matrícula" required>
+                <input type="text" id="student-cpf" placeholder="CPF" required>
+                <input type="password" id="student-password" placeholder="Senha" required>
+                <input type="password" id="student-confirm-password" placeholder="Confirmar Senha" required>
+                <button type="submit">Cadastrar Aluno</button>
+                <a href="#" class="link" onclick="toggleVisibility('student-register-container', 'register-container')">Voltar</a>
+            </div>
+        </form>
+    </div>
+
+    <div id="student-main-container" class="container hidden">
+        <h2>Painel do Aluno</h2>
+        <p>Bem-vindo ao painel de controle do aluno.</p>
+        <div class="buttons">
+            <button>Ver Notas</button>
+            <button>Minhas Turmas</button>
+            <button>Atividades</button>
+            <button>Ver Professores</button>
+            <button onclick="logout()">Sair</button>
+        </div>
+    </div>
+
+    <div id="teacher-main-container" class="container hidden">
+        <h2>Painel do Professor</h2>
+        <p>Bem-vindo ao painel de controle do professor.</p>
+        <div class="buttons">
+            <button onclick="toggleVisibility('teacher-main-container', 'teacher-register-student-container')">Cadastrar Alunos</button>
+            <button onclick="toggleVisibility('teacher-main-container', 'student-list')">Ver Alunos Cadastrados</button>
+            <button>Adicionar Notas</button>
+            <button>Adicionar Turmas</button>
+            <button>Ver Turmas</button>
+            <button>Ver Relatórios</button>
+            <button>Gerenciar Atividades</button>
+            <button onclick="logoutTeacher()">Sair</button>
+        </div>
+    </div>
+
+    <div id="student-list" class="container hidden">
+        <h3>Alunos Cadastrados:</h3>
+        <ul id="aluno-ul"></ul>
+        <button onclick="toggleVisibility('student-list', 'teacher-main-container')">Voltar</button>
+    </div>
+
+    <div id="teacher-register-student-container" class="container hidden">
+        <h2>Cadastro de Aluno</h2>
+        <form onsubmit="registerStudentFromTeacher(event)">
+            <div class="form-container">
+                <input type="text" id="teacher-student-nome" placeholder="Nome" required>
+                <input type="email" id="teacher-student-email" placeholder="Email" required>
+                <input type="date" id="teacher-student-dob" placeholder="Data de Nascimento" required>
+                <input type="text" id="teacher-student-id" placeholder="Matrícula" required>
+                <input type="text" id="teacher-student-cpf" placeholder="CPF" required>
+                <input type="password" id="teacher-student-password" placeholder="Senha" required>
+                <input type="password" id="teacher-student-confirm-password" placeholder="Confirmar Senha" required>
+                <button type="submit">Cadastrar Aluno</button>
+                <a href="#" class="link" onclick="toggleVisibility('teacher-register-student-container', 'teacher-main-container')">Voltar</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const alunosCadastrados = [];
+        let currentTeacherName = ''; // Para armazenar o nome do professor logado
+        let currentStudentName = ''; // Para armazenar o nome do aluno logado
+
+        function toggleVisibility(hideId, showId) {
+            document.getElementById(hideId).classList.add('hidden');
+            document.getElementById(showId).classList.remove('hidden');
+        }
+
+        function login(event) {
+            event.preventDefault();
+            const role = document.querySelector('select[name="role"]').value;
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (role === "professor") {
+                currentTeacherName = "Professor"; // Nome fixo do professor
+                toggleVisibility('login-container', 'teacher-main-container');
+            } else {
+                const aluno = alunosCadastrados.find(a => a.email === email && a.password === password);
+                if (aluno) {
+                    currentStudentName = aluno.nome; // Armazena o nome do aluno logado
+                    toggleVisibility('login-container', 'student-main-container');
+                } else {
+                    alert("Email ou senha incorretos!");
+                }
+            }
+        }
+
+        function register(event) {
+            event.preventDefault();
+            toggleVisibility('teacher-register-container', 'teacher-main-container');
+        }
+
+        function registerStudent(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById('student-nome').value;
+            const email = document.getElementById('student-email').value;
+            const dob = document.getElementById('student-dob').value;
+            const id = document.getElementById('student-id').value;
+            const cpf = document.getElementById('student-cpf').value;
+            const password = document.getElementById('student-password').value;
+
+            const aluno = {
+                nome,
+                email,
+                dob,
+                id,
+                cpf,
+                password,
+                teacher: currentTeacherName // Adiciona o nome do professor
+            };
+
+            alunosCadastrados.push(aluno);
+            updateStudentList();
+
+            // Direciona para a lista de alunos cadastrados
+            toggleVisibility('student-register-container', 'student-list');
+        }
+
+        function registerStudentFromTeacher(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById('teacher-student-nome').value; // Adicionando a captura do nome
+            const email = document.getElementById('teacher-student-email').value;
+            const dob = document.getElementById('teacher-student-dob').value;
+            const id = document.getElementById('teacher-student-id').value;
+            const cpf = document.getElementById('teacher-student-cpf').value;
+            const password = document.getElementById('teacher-student-password').value;
+
+            const aluno = {
+                nome,
+                email,
+                dob,
+                id,
+                cpf,
+                password,
+                teacher: currentTeacherName // Adiciona o nome do professor
+            };
+
+            alunosCadastrados.push(aluno);
+            updateStudentList();
+            alert("Cadastro de aluno realizado com sucesso!");
+
+            // Direciona para a lista de alunos cadastrados
+            toggleVisibility('teacher-register-student-container', 'student-list');
+        }
+
+        function updateStudentList() {
+            const ul = document.getElementById('aluno-ul');
+            ul.innerHTML = ''; // Limpa a lista antes de adicionar novos alunos
+            alunosCadastrados.forEach(aluno => {
+                const li = document.createElement('li');
+                li.textContent = `${aluno.nome} - ${aluno.email} - ${aluno.id} (Cadastrado por: ${aluno.teacher})`;
+                ul.appendChild(li);
+            });
+        }
+
+        function logout() {
+            currentStudentName = ''; // Limpa o nome do aluno ao fazer logout
+            toggleVisibility('student-main-container', 'home-container');
+        }
+
+        function logoutTeacher() {
+            toggleVisibility('teacher-main-container', 'home-container');
+        }
+    </script>
+</body>
+</html>
