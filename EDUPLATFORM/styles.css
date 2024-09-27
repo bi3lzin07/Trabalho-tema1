@@ -1,0 +1,129 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    background: linear-gradient(135deg, #007bff, #6e8efb);
+    padding: 20px;
+}
+.container {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 400px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 20px;
+}
+.container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+h2, h1 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+}
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.buttons button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+.buttons button:hover {
+    background-color: #0056b3;
+    transform: scale(1.03);
+}
+.form-container {
+    margin-top: 20px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.form-container input,
+.form-container select {
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+.form-container input:focus,
+.form-container select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+.form-container .link {
+    display: block;
+    margin-top: 15px;
+    color: #007bff;
+    text-decoration: none;
+}
+.form-container .link:hover {
+    text-decoration: underline;
+}
+.hidden {
+    display: none;
+}
+.profile {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 20px auto;
+}
+.name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+.details {
+    margin-top: 10px;
+    line-height: 1.6;
+    font-size: 14px;
+    color: #444;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+.profiles-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.professors-container {
+    width: 600px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+.profile {
+    flex: 1 1 calc(50% - 20px);
+    margin: 10px;
+}
+#student-register-container {
+    background-color: #f8f9fa; /* Fundo claro */
+    border: 2px solid #007bff; /* Borda azul */
+}
+#teacher-register-container {
+    background-color: #fff; /* Fundo padrão */
+    border: 2px solid #28a745; /* Borda verde */
+}
