@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPlatform - Bem-vindo</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; 
+            background: linear-gradient(135deg, #007bff, #6e8efb);
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+        }
+        .container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        h2, h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .buttons button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .buttons button:hover {
+            background-color: #0056b3;
+            transform: scale(1.03);
+        }
+        .form-container {
+            margin-top: 20px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-container input:focus,
+        .form-container select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .form-container .link {
+            display: block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .form-container .link:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+        .profile {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        .name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .details {
+            margin-top: 10px;
+            line-height: 1.6;
+            font-size: 14px;
+            color: #444;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+        .profiles-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .professors-container {
+            width: 600px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .profile {
+            flex: 1 1 calc(50% - 20px);
+            margin: 10px;
+        }
+        /* Estilo específico para a tela de cadastro de alunos */
+        #student-register-container {
+            background-color: #f8f9fa; /* Fundo claro */
+            border: 2px solid #007bff; /* Borda azul */
+        }
+        /* Estilo específico para a tela de cadastro escolar */
+        #teacher-register-container {
+            background-color: #fff; /* Fundo padrão */
+            border: 2px solid #28a745; /* Borda verde */
+        }
+    </style>
+    <script>
+        const students = []; // Array para armazenar dados dos alunos
+
+        function toggleVisibility(hideId, showId) {
+            document.getElementById(hideId).classList.add('hidden');
+            document.getElementById(showId).classList.remove('hidden');
+        }
+
+        function login(event) {
+            event.preventDefault();
+            const role = document.querySelector('select[name="role"]').value;
+            if (role === "professor") {
+                toggleVisibility('login-container', 'teacher-main-container');
+            } else {
+                toggleVisibility('login-container', 'student-main-container');
+            }
+        }
+
+        function showRegister() {
+            toggleVisibility('login-container', 'register-container');
+        }
+
+        function register(event) {
+            event.preventDefault();
+            toggleVisibility('teacher-register-container', 'view-students-container'); // Redireciona para ver alunos
+        }
+
+        function registerStudent(event) {
+            event.preventDefault();
+            const studentName = document.getElementById('student-name').value;
+            const studentEmail = document.getElementById('student-email').value;
+            const studentMatricula = document.getElementById('student-matricula').value;
+            const studentPassword = document.getElementById('student-password').value;
+
+            const student = {
+                name: studentName,
+                email: studentEmail,
+                matricula: studentMatricula,
+                password: studentPassword
+            };
+            students.push(student);
+
+            alert(`Cadastro de aluno ${studentName} realizado com sucesso!`);
+            updateStudentList(); 
+            toggleVisibility('student-register-container', 'student-main-container'); // Redireciona para o painel do aluno
+        }
+
+        function updateStudentList() {
+            const studentListContainer = document.getElementById('students-list');
+            studentListContainer.innerHTML = ''; 
+
+            students.forEach(student => {
+                const studentProfile = document.createElement('div');
+                studentProfile.className = 'profile';
+                studentProfile.innerHTML = 
+                    `<div class="name">${student.name}</div>
+                    <div class="details">
+                        <p><strong>Email:</strong> ${student.email}</p>
+                        <p><strong>Matrícula:</strong> ${student.matricula}</p>
+                    </div>`;
+                studentListContainer.appendChild(studentProfile);
+            });
+        }
+
+        function showStudents() {
+            toggleVisibility('teacher-main-container', 'view-students-container');
+            updateStudentList(); 
+        }
+
+        function logout() {
+            toggleVisibility('student-main-container', 'home-container');
+        }
+
+        function logoutTeacher() {
+            toggleVisibility('teacher-main-container', 'home-container');
+        }
+
+        function showProfessors() {
+            toggleVisibility('student-main-container', 'professors-container');
+        }
+    </script>
+</head>
+<body>
+    <div id="home-container" class="container">
+        <h2>Bem-vindo à EduPlatform</h2>
+        <p>Gerencie suas turmas e atividades com facilidade e eficiência.</p>
+        <div class="buttons">
+            <button onclick="toggleVisibility('home-container', 'register-container')">Cadastrar-se</button>
+            <button onclick="toggleVisibility('home-container', 'login-container')">Entrar</button>
+        </div>
+    </div>
+
+    <div id="login-container" class="container hidden">
+        <h2>Login Escolar</h2>
+        <form onsubmit="login(event)">
+            <div class="form-container">
+                <select name="role" required>
+                    <option value="" disabled selected>Selecione seu perfil</option>
+                    <option value="professor">Professor</option>
+                    <option value="aluno">Aluno</option>
+                </select>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+                <a href="#" class="link" onclick="toggleVisibility('login-container', 'register-container')">Não tem uma conta? Cadastre-se</a>
+            </div>
+        </form>
+    </div>
+
+    <div id="register-container" class="container hidden">
+        <h2>Cadastro Escolar</h2>
+        <p>Selecione seu perfil:</p>
+        <div class="buttons">
+            <button onclick="toggleVisibility('register-container', 'teacher-register-container')">Professor</button>
+            <button onclick="toggleVisibility('register-container', 'student-register-container')">Aluno</button>
+        </div>
+        <a href="#" class="link" onclick="toggleVisibility('register-container', 'login-container')">Já tem uma conta? Entrar</a>
+    </div>
+
+    <div id="teacher-register-container" class="container hidden">
+        <h2>Cadastro de Professor</h2>
+        <form onsubmit="register(event)">
+            <div class="form-container">
+                <input type="text" placeholder="Nome" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Matéria" required>
+                <input type="password" placeholder="Senha" required>
+                <input type="password" placeholder="Confirmar Senha" required>
+                <input type="text" placeholder="CPF" required>
+                <button type="submit">Cadastrar Professor</button>
+                <a href="#" class="link" onclick="toggleVisibility('teacher-register-container', 'register-container')">Voltar</a>
+            </div>
+        </form>
+    </div>
+
+    <div id="student-register-container" class="container hidden">
+        <h2>Cadastro de Aluno</h2>
+        <form onsubmit="registerStudent(event)">
+            <div class="form-container">
+                <input type="text" id="student-name" placeholder="Nome" required>
+                <input type="email" id="student-email" placeholder="Email" required>
+                <input type="text" id="student-matricula" placeholder="Matrícula" required>
+                <input type="password" id="student-password" placeholder="Senha" required>
+                <input type="password" placeholder="Confirmar Senha" required>
+                <button type="submit">Cadastrar Aluno</button>
+                <a href="#" class="link" onclick="toggleVisibility('student-register-container', 'teacher-main-container')">Voltar</a>
+            </div>
+        </form>
+    </div>
+
+    <div id="view-students-container" class="container hidden">
+        <h2>Alunos Cadastrados</h2>
+        <p>Aqui estão os alunos cadastrados.</p>
+        <div id="students-list"></div>
+        <div class="buttons">
+            <button onclick="toggleVisibility('view-students-container', 'teacher-main-container')">Voltar ao Painel do Professor</button>
+        </div>
+    </div>
+
+    <div id="student-main-container" class="container hidden">
+        <h2>Painel do Aluno</h2>
+        <p>Bem-vindo ao painel de controle do aluno.</p>
+        <div class="buttons">
+            <button>Ver Notas</button>
+            <button>Minhas Turmas</button>
+            <button>Atividades</button>
+            <button onclick="showProfessors()">Ver Professores</button>
+            <button onclick="logout()">Sair</button>
+        </div>
+    </div>
+
+    <div id="teacher-main-container" class="container hidden">
+    <h2>Painel do Professor</h2>
+    <p>Bem-vindo ao painel de controle do professor.</p>
+    <div class="buttons">
+        <button>Cadastrar Alunos</button>
+        <button>Adicionar Notas</button>
+        <button>Adicionar Turmas</button>
+        <button>Ver Turmas</button>
+        <button>Ver Relatórios</button>
+        <button>Gerenciar Atividades</button>
+        <button onclick="logoutTeacher()">Sair</button>
+    </div>
+</div>
+
+
+
+    <div id="professors-container" class="professors-container hidden">
+        <h1>Perfis dos Professores</h1>
+        <div class="profiles-grid">
+            <div class="profile">
+                <div class="name">Prof. Maria Oliveira</div>
+                <div class="details">
+                    <p><strong>Matéria:</strong> Português</p>
+                    <p><strong>Experiência:</strong> 10 anos de ensino em escolas públicas e privadas.</p>
+                    <p><strong>Email:</strong> maria.oliveira@email.com</p>
+                    <p><strong>Descrição:</strong> Apaixonada por literatura e por incentivar a leitura entre os alunos.</p>
+                </div>
+            </div>
+            <div class="profile">
+                <div class="name">Prof. Carlos Almeida</div>
+                <div class="details">
+                    <p><strong>Matéria:</strong> Matemática</p>
+                    <p><strong>Experiência:</strong> 8 anos de ensino em diversas escolas.</p>
+                    <p><strong>Email:</strong> carlos.almeida@email.com</p>
+                    <p><strong>Descrição:</strong> Adoro desafios matemáticos e gosto de aplicar em atividades práticas.</p>
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <button onclick="toggleVisibility('professors-container', 'student-main-container')">Voltar</button>
+        </div>
+    </div>
+</body>
+</html>
