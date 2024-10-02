@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Notas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 48%;
+            margin-right: 4%;
+        }
+        button:last-child {
+            margin-right: 0;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        td {
+            background-color: #fff;
+        }
+        .nota-alta { color: #28a745; } /* Verde para notas altas */
+        .nota-baixa { color: #dc3545; } /* Vermelho para notas baixas */
+        .disciplina-group {
+            margin-bottom: 10px;
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #e9f7fe;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gerenciamento de Notas</h1>
+
+    <form id="form">
+        <label for="aluno">Nome do Aluno:</label>
+        <input type="text" id="aluno" required>
+
+        <label for="serie">Série:</label>
+        <select id="serie" required>
+            <option value="">Selecione a série</option>
+            <option value="1">1ª Série</option>
+            <option value="2">2ª Série</option>
+            <option value="3">3ª Série</option>
+            <option value="4">4ª Série</option>
+            <option value="5">5ª Série</option>
+            <option value="6">6ª Série</option>
+            <option value="7">7ª Série</option>
+            <option value="8">8ª Série</option>
+            <option value="9">9ª Série</option>
+            <option value="1 Médio">1º Médio</option>
+            <option value="2 Médio">2º Médio</option>
+            <option value="3 Médio">3º Médio</option>
+        </select>
+
+        <div class="disciplina-group">
+            <label for="matematica">Matemática:</label>
+            <input type="number" id="matematica" step="0.1" min="0" max="10" required>
+
+            <label for="portugues">Português:</label>
+            <input type="number" id="portugues" step="0.1" min="0" max="10" required>
+
+            <label for="historia">História:</label>
+            <input type="number" id="historia" step="0.1" min="0" max="10" required>
+
+            <label for="geografia">Geografia:</label>
+            <input type="number" id="geografia" step="0.1" min="0" max="10" required>
+
+            <label for="ciencias">Ciências:</label>
+            <input type="number" id="ciencias" step="0.1" min="0" max="10" required>
+        </div>
+        
+        <button type="submit">Salvar Notas</button>
+    </form>
+
+    <h2>Lista de Alunos, Notas e Disciplinas</h2>
+    <table id="tabela">
+        <thead>
+            <tr>
+                <th>Aluno</th>
+                <th>Série</th>
+                <th>Disciplina</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Alunos e notas serão adicionados aqui -->
+        </tbody>
+    </table>
+
+    <script>
+        const form = document.getElementById('form');
+        const tabela = document.getElementById('tabela').getElementsByTagName('tbody')[0];
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const aluno = document.getElementById('aluno').value;
+            const serie = document.getElementById('serie').value;
+            const materias = ['Matemática', 'Português', 'História', 'Geografia', 'Ciências'];
+            const notas = [
+                parseFloat(document.getElementById('matematica').value),
+                parseFloat(document.getElementById('portugues').value),
+                parseFloat(document.getElementById('historia').value),
+                parseFloat(document.getElementById('geografia').value),
+                parseFloat(document.getElementById('ciencias').value)
+            ];
+
+            materias.forEach((disciplina, index) => {
+                const nota = notas[index];
+                const newRow = tabela.insertRow();
+                newRow.insertCell(0).textContent = aluno;
+                newRow.insertCell(1).textContent = serie;
+                newRow.insertCell(2).textContent = disciplina;
+                const notaCell = newRow.insertCell(3);
+                notaCell.textContent = nota.toFixed(1);
+                notaCell.className = nota >= 7 ? 'nota-alta' : 'nota-baixa';
+            });
+
+            // Limpa o formulário
+            form.reset();
+        });
+    </script>
+
+</body>
+</html>

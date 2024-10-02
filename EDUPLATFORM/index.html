@@ -5,6 +5,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduPlatform - Bem-vindo</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; 
+            background: linear-gradient(135deg, #007bff, #6e8efb);
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+        }
+        .container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        h2, h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .buttons button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .buttons button:hover {
+            background-color: #0056b3;
+            transform: scale(1.03);
+        }
+        .form-container {
+            margin-top: 20px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-container input:focus,
+        .form-container select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+        .form-container .link {
+            display: block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .form-container .link:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+        .profile {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        .name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        .details {
+            margin-top: 10px;
+            line-height: 1.6;
+            font-size: 14px;
+            color: #444;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+        .profiles-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .professors-container {
+            width: 600px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .profile {
+            flex: 1 1 calc(50% - 20px);
+            margin: 10px;
+        }
+        #student-register-container {
+            background-color: #f8f9fa; /* Fundo claro */
+            border: 2px solid #007bff; /* Borda azul */
+        }
+        #teacher-register-container {
+            background-color: #fff; /* Fundo padrão */
+            border: 2px solid #28a745; /* Borda verde */
+        }
+    </style>
 </head>
 <body>
     <div id="home-container" class="container">
@@ -104,38 +235,204 @@
             <button>Adicionar Turmas</button>
             <button>Ver Turmas</button>
             <button>Ver Relatórios</button>
-            <button>Gerenciar Atividades</button>
+            <button onclick="toggleVisibility('teacher-main-container', 'activity-management-container')">Gerenciar Atividades</button>
             <button onclick="logoutTeacher()">Sair</button>
         </div>
+    </div>
+
+    <div id="activity-management-container" class="container hidden">
+        <h2>Gerenciar Atividades</h2>
+        <form id="activity-form" onsubmit="addActivity(event)">
+            <div class="form-container">
+                <h3>Adicionar Nova Atividade</h3>
+                <input type="text" id="activity-title" placeholder="Título da Atividade" required>
+                <input type="date" id="activity-due-date" required>
+                <textarea id="activity-description" placeholder="Descrição da Atividade" required></textarea>
+                <input type="date" id="activity-post-date" value="${new Date().toISOString().split('T')[0]}" readonly>
+                <button type="submit">Adicionar Atividade</button>
+                <a href="#" class="link" onclick="toggleVisibility('activity-management-container', 'teacher-main-container')">Voltar</a>
+            </div>
+        </form>
+        <h3>Atividades Cadastradas</h3>
+        <ul id="activity-list"></ul>
     </div>
 
     <div id="professors-container" class="professors-container hidden">
         <h1>Perfis dos Professores</h1>
         <div class="profiles-grid">
             <div class="profile">
-                <div class="name">Prof. Maria Oliveira</div>
-                <div class="details">
-                    <p><strong>Matéria:</strong> Português</p>
-                    <p><strong>Experiência:</strong> 10 anos de ensino em escolas públicas e privadas.</p>
-                    <p><strong>Email:</strong> maria.oliveira@email.com</p>
-                    <p><strong>Descrição:</strong> Apaixonada por literatura e por incentivar a leitura entre os alunos.</p>
-                </div>
-            </div>
-            <div class="profile">
                 <div class="name">Prof. Carlos Almeida</div>
-                <div class="details">
-                    <p><strong>Matéria:</strong> Matemática</p>
-                    <p><strong>Experiência:</strong> 8 anos de ensino em diversas escolas.</p>
-                    <p><strong>Email:</strong> carlos.almeida@email.com</p>
-                    <p><strong>Descrição:</strong> Adoro desafios matemáticos e gosto de aplicar em atividades práticas.</p>
-                </div>
+            <div class="details">
+                <p><strong>Matéria:</strong> Matemática</p>
+                <p><strong>Experiência:</strong> 8 anos de ensino em diversas escolas.</p>
+                <p><strong>Email:</strong> carlos.almeida@email.com</p>
+                <p><strong>Descrição:</strong> Adoro desafios matemáticos e gosto de aplicar em atividades práticas.</p>
             </div>
+        </div>
+        <div class="profile">
+            <div class="name">Prof. Maria Oliveira</div>
+            <div class="details">
+                <p><strong>Matéria:</strong> Português</p>
+                <p><strong>Experiência:</strong> 10 anos de ensino em escolas públicas e privadas.</p>
+                <p><strong>Email:</strong> maria.oliveira@email.com</p>
+                <p><strong>Descrição:</strong> Apaixonada por literatura e por incentivar a leitura entre os alunos.</p>
+            </div>
+        </div>
+        <div class="profile">
+            <div class="name">Prof. Ana Santos</div>
+            <div class="details">
+                <p><strong>Matéria:</strong> Ciências</p>
+                <p><strong>Experiência:</strong> 5 anos de experiência em ensino fundamental.</p>
+                <p><strong>Email:</strong> ana.santos@email.com</p>
+                <p><strong>Descrição:</strong> Foco em educação ambiental e ciências aplicadas.</p>
+            </div>
+        </div>
+        <div class="profile">
+            <div class="name">Prof. João Pereira</div>
+            <div class="details">
+                <p><strong>Matéria:</strong> História</p>
+                <p><strong>Experiência:</strong> 12 anos de ensino com foco em história brasileira.</p>
+                <p><strong>Email:</strong> joao.pereira@email.com</p>
+                <p><strong>Descrição:</strong> Envolvido em projetos de história viva e turismo educacional.</p>
+            </div>
+        </div>
+        <div class="profile">
+            <div class="name">Prof. Fernanda Lima</div>
+            <div class="details">
+                <p><strong>Matéria:</strong> Geografia</p>
+                <p><strong>Experiência:</strong> 6 anos de ensino com foco em geografia brasileira e mundial.</p>
+                <p><strong>Email:</strong> fernanda.lima@email.com</p>
+                <p><strong>Descrição:</strong> Apaixonada por ensinar sobre culturas e ecossistemas diversos.</p>
+            </div>
+        </div>
         </div>
         <div class="buttons">
             <button onclick="toggleVisibility('professors-container', 'student-main-container')">Voltar</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const students = []; // Array para armazenar dados dos alunos
+
+        function toggleVisibility(hideId, showId) {
+            document.getElementById(hideId).classList.add('hidden');
+            document.getElementById(showId).classList.remove('hidden');
+        }
+
+        function login(event) {
+            event.preventDefault();
+            const role = document.querySelector('select[name="role"]').value;
+            if (role === "professor") {
+                toggleVisibility('login-container', 'teacher-main-container');
+            } else {
+                toggleVisibility('login-container', 'student-main-container');
+            }
+        }
+
+        function register(event) {
+            event.preventDefault();
+            toggleVisibility('teacher-register-container', 'view-students-container'); // Redireciona para ver alunos
+        }
+
+        function registerStudent(event) {
+            event.preventDefault();
+            const studentName = document.getElementById('student-name').value;
+            const studentEmail = document.getElementById('student-email').value;
+            const studentMatricula = document.getElementById('student-matricula').value;
+            const studentPassword = document.getElementById('student-password').value;
+
+            const student = {
+                name: studentName,
+                email: studentEmail,
+                matricula: studentMatricula,
+                password: studentPassword
+            };
+            students.push(student);
+
+            alert(`Cadastro de aluno ${studentName} realizado com sucesso!`);
+            updateStudentList(); 
+            toggleVisibility('student-register-container', 'student-main-container'); // Redireciona para o painel do aluno
+        }
+
+        function updateStudentList() {
+            const studentListContainer = document.getElementById('students-list');
+            studentListContainer.innerHTML = ''; 
+
+            students.forEach(student => {
+                const studentProfile = document.createElement('div');
+                studentProfile.className = 'profile';
+                studentProfile.innerHTML = 
+                    `<div class="name">${student.name}</div>
+                    <div class="details">
+                        <p><strong>Email:</strong> ${student.email}</p>
+                        <p><strong>Matrícula:</strong> ${student.matricula}</p>
+                    </div>`;
+                studentListContainer.appendChild(studentProfile);
+            });
+        }
+
+        function showStudents() {
+            toggleVisibility('teacher-main-container', 'view-students-container');
+            updateStudentList(); 
+        }
+
+        function logout() {
+            toggleVisibility('student-main-container', 'home-container');
+        }
+
+        function logoutTeacher() {
+            toggleVisibility('teacher-main-container', 'home-container');
+        }
+
+        function showProfessors() {
+            toggleVisibility('student-main-container', 'professors-container');
+        }
+
+        // Funções para gerenciar atividades
+        let editingActivity = null;
+
+        function addActivity(event) {
+            event.preventDefault();
+            const title = document.getElementById('activity-title').value;
+            const dueDate = document.getElementById('activity-due-date').value;
+            const description = document.getElementById('activity-description').value;
+            const postDate = document.getElementById('activity-post-date').value;
+
+            if (editingActivity) {
+                editingActivity.querySelector('.activity-title').textContent = title;
+                editingActivity.querySelector('.activity-due-date').textContent = `Entrega: ${dueDate}`;
+                editingActivity.querySelector('.activity-description').textContent = description;
+                editingActivity.querySelector('.activity-post-date').textContent = `Postado em: ${postDate}`;
+                editingActivity = null;
+            } else {
+                const activityList = document.getElementById('activity-list');
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span class="activity-title">${title}</span>
+                    <span class="activity-due-date">Entrega: ${dueDate}</span>
+                    <span class="activity-description">${description}</span>
+                    <span class="activity-post-date">Postado em: ${postDate}</span>
+                    <button onclick="editActivity(this)">Editar</button>
+                    <button onclick="deleteActivity(this)">Excluir</button>
+                `;
+                activityList.appendChild(listItem);
+            }
+
+            document.getElementById('activity-form').reset();
+            document.getElementById('activity-post-date').value = new Date().toISOString().split('T')[0]; // Atualiza a data de postagem
+        }
+
+        function editActivity(button) {
+            editingActivity = button.parentElement;
+            document.getElementById('activity-title').value = editingActivity.querySelector('.activity-title').textContent;
+            document.getElementById('activity-due-date').value = editingActivity.querySelector('.activity-due-date').textContent.split(': ')[1];
+            document.getElementById('activity-description').value = editingActivity.querySelector('.activity-description').textContent;
+            // Não permite editar a data de postagem
+        }
+
+        function deleteActivity(button) {
+            button.parentElement.remove();
+        }
+    </script>
 </body>
 </html>
