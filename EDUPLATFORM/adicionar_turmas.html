@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Turmas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Alinha verticalmente */
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 3rem; /* Aumentado o padding */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px; /* Aumentado o max-width */
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn.btn-view {
+            background-color: #28a745;
+        }
+
+        .btn.btn-view:hover {
+            background-color: #218838;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li {
+            background: #f7f7f7;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="add-turma-container">
+        <h1>Adicionar Turmas</h1>
+        <form id="turma-form">
+            <div class="form-group">
+                <label for="nomeTurma">Nome da Turma:</label>
+                <input type="text" id="nomeTurma" required>
+            </div>
+            <div class="form-group">
+                <label for="serie">Série:</label>
+                <select id="serie" required>
+                    <option value="">Selecione</option>
+                    <option value="1º Ano EF1">1º Ano EF1</option>
+                    <option value="2º Ano EF1">2º Ano EF1</option>
+                    <option value="3º Ano EF1">3º Ano EF1</option>
+                    <option value="4º Ano EF1">4º Ano EF1</option>
+                    <option value="5º Ano EF1">5º Ano EF1</option>
+                    <option value="6º Ano EF2">6º Ano EF2</option>
+                    <option value="7º Ano EF2">7º Ano EF2</option>
+                    <option value="8º Ano EF2">8º Ano EF2</option>
+                    <option value="9º Ano EF2">9º Ano EF2</option>
+                    <option value="1º Ano EM">1º Ano EM</option>
+                    <option value="2º Ano EM">2º Ano EM</option>
+                    <option value="3º Ano EM">3º Ano EM</option>
+                </select>
+            </div>
+            <div class="button-group">
+                <button type="submit" class="btn">Adicionar Turma</button>
+                <button type="button" class="btn btn-view" id="view-turmas">Ver Turmas Adicionadas</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container" id="view-turmas-container" style="display: none;">
+        <h1>Turmas Adicionadas</h1>
+        <ul id="turmas-list">
+            <!-- As turmas serão exibidas aqui -->
+        </ul>
+        <button class="btn" id="back-to-add">Voltar</button>
+    </div>
+
+    <script>
+        document.getElementById('turma-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nomeTurma = document.getElementById('nomeTurma').value;
+            const serie = document.getElementById('serie').value;
+
+            if (nomeTurma && serie) {
+                const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+                turmas.push({ nome: nomeTurma, serie });
+                localStorage.setItem('turmas', JSON.stringify(turmas));
+                alert('Turma adicionada com sucesso!');
+                this.reset();
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        });
+
+        document.getElementById('view-turmas').addEventListener('click', function() {
+            document.getElementById('add-turma-container').style.display = 'none';
+            document.getElementById('view-turmas-container').style.display = 'block';
+            carregarTurmas();
+        });
+
+        document.getElementById('back-to-add').addEventListener('click', function() {
+            document.getElementById('view-turmas-container').style.display = 'none';
+            document.getElementById('add-turma-container').style.display = 'block';
+        });
+
+        function carregarTurmas() {
+            const turmasList = document.getElementById('turmas-list');
+            const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+
+            if (turmas.length === 0) {
+                turmasList.innerHTML = '<li>Nenhuma turma adicionada ainda.</li>';
+            } else {
+                turmasList.innerHTML = turmas.map(turma => 
+                    `<li><strong>Nome:</strong> ${turma.nome} - <strong>Série:</strong> ${turma.serie}</li>`
+                ).join('');
+            }
+        }
+    </script>
+</body>
+</html>

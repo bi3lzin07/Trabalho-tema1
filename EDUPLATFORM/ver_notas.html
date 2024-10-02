@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notas do Aluno</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        td {
+            background-color: #fff;
+        }
+        .nota-alta { color: #28a745; } /* Verde para notas altas */
+        .nota-baixa { color: #dc3545; } /* Vermelho para notas baixas */
+        .student-info {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #007bff;
+            border-radius: 8px;
+            background-color: #e9f7fe;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Notas do Aluno</h1>
+
+    <div class="student-info">
+        <strong>Aluno:</strong> <span id="alunoNome"></span><br>
+        <strong>Série:</strong> <span id="alunoSerie"></span>
+    </div>
+
+    <h2>Disciplinas e Notas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Disciplina</th>
+                <th>Nota</th>
+            </tr>
+        </thead>
+        <tbody id="notasTable">
+            <!-- As notas serão inseridas aqui -->
+        </tbody>
+    </table>
+
+    <script>
+        // Dados do aluno e notas simulados (podem vir de um banco de dados, por exemplo)
+        const aluno = {
+            nome: "João da Silva",
+            serie: "7ª Série",
+            notas: [
+                { disciplina: "Matemática", nota: 8.5 },
+                { disciplina: "Português", nota: 7.0 },
+                { disciplina: "História", nota: 6.5 },
+                { disciplina: "Geografia", nota: 9.0 },
+                { disciplina: "Ciências", nota: 7.5 }
+            ]
+        };
+
+        // Exibe os dados do aluno
+        document.getElementById('alunoNome').textContent = aluno.nome;
+        document.getElementById('alunoSerie').textContent = aluno.serie;
+
+        // Exibe as notas do aluno
+        const notasTable = document.getElementById('notasTable');
+        aluno.notas.forEach(nota => {
+            const row = notasTable.insertRow();
+            row.insertCell(0).textContent = nota.disciplina;
+            const notaCell = row.insertCell(1);
+            notaCell.textContent = nota.nota.toFixed(1);
+            notaCell.className = nota.nota >= 7 ? 'nota-alta' : 'nota-baixa';
+        });
+    </script>
+
+</body>
+</html>
